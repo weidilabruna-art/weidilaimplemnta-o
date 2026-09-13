@@ -1,0 +1,639 @@
+/* =========================================================
+   FORMULÁRIO AUDAX - ESTILO CLONE RESPONDI
+   ========================================================= */
+
+:root {
+  --form-color-primary: #ffffff;
+  --form-color-text: #ffffff;
+  --form-color-bg: #b6b5b3;
+  --form-font: 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --input-border-bottom: rgba(255, 255, 255, 0.5);
+  --input-border-bottom-focus: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-border: rgba(255, 255, 255, 0.3);
+  --card-hover-bg: rgba(255, 255, 255, 0.2);
+  --error-color: #ff5252;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--form-font);
+  font-weight: 400;
+  background-color: var(--form-color-bg);
+  background-image: url('/audax/bg.png'), url('bg.png'), url('https://cloudcdn.respondi.app/S11451/userfiles/176169/cc608808-5c81-445e-ac45-44f754701422.png?Expires=1789232025&KeyName=rsp-privateprodpkey&Signature=IY9VQuKWyelAruSCD8YAPugAAes=');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--form-color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Overlay sutil */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 20, 24, 0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------
+   Barra de Progresso (Topo)
+   --------------------------------------------------------- */
+.progress-bar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 100;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------
+   Header & Logo
+   --------------------------------------------------------- */
+.form-header {
+  position: fixed;
+  top: 28px;
+  left: 40px;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.form-logo {
+  max-height: 48px;
+  max-width: 170px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: transform 0.2s ease;
+}
+
+.form-logo:hover {
+  transform: scale(1.02);
+}
+
+/* ---------------------------------------------------------
+   Viewport e Slides
+   --------------------------------------------------------- */
+.form-viewport {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  z-index: 10;
+}
+
+.form-slides-container {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide-item {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(40px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-item.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.slide-item.slide-up-exit {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-40px);
+  pointer-events: none;
+}
+
+.slide-item.slide-down-exit {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(40px);
+  pointer-events: none;
+}
+
+.slide-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------
+   Tipografia — idêntico ao Respondi (Lato, leve e elegante)
+   --------------------------------------------------------- */
+.slide-title {
+  font-size: clamp(32px, 5.5vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.slide-description {
+  font-size: clamp(16px, 2.4vw, 20px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+  margin-bottom: 32px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.question-label {
+  font-size: clamp(26px, 4.2vw, 36px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.q-number {
+  font-weight: 400;
+  font-size: 0.75em;
+  opacity: 0.75;
+  margin-right: 6px;
+}
+
+.required-star {
+  color: #ff5252;
+  margin-left: 2px;
+}
+
+.question-hint {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: -2px;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------
+   Campos de Entrada (Inputs) — estilo Respondi: só bottom border
+   --------------------------------------------------------- */
+.field-wrap {
+  width: 100%;
+  max-width: 540px;
+  margin-bottom: 24px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 8px 2px 12px 2px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--input-border-bottom);
+  border-radius: 0;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.25s ease;
+  caret-color: #ffffff;
+}
+
+.field-input:focus {
+  border-bottom-color: var(--input-border-bottom-focus);
+}
+
+.field-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+.field-error {
+  display: none;
+  color: var(--error-color);
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 6px;
+  padding-left: 0;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.field-wrap.has-error .field-input {
+  border-bottom-color: var(--error-color) !important;
+}
+
+.field-wrap.has-error .phone-input-group {
+  border-bottom-color: var(--error-color) !important;
+}
+
+.field-wrap.has-error .field-error {
+  display: block;
+}
+
+/* ---------------------------------------------------------
+   Phone Input — sem caixa, só bandeira + linha inferior
+   --------------------------------------------------------- */
+.phone-input-group {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--input-border-bottom);
+  transition: border-color 0.25s ease;
+  gap: 10px;
+}
+
+.phone-input-group:focus-within {
+  border-bottom-color: var(--input-border-bottom-focus);
+}
+
+.country-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 0 12px 0;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.country-badge .flag {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.country-badge .dial-code {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.phone-input {
+  border: none;
+  border-bottom: none;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none !important;
+  padding-left: 0;
+  flex: 1;
+}
+
+.phone-input:focus {
+  border-bottom: none;
+}
+
+/* ---------------------------------------------------------
+   Opções de Escolha (Choice Cards - Radio) — Respondi style
+   --------------------------------------------------------- */
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin: 14px 0 16px 0;
+}
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.38);
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  position: relative;
+  outline: none;
+}
+
+.choice-card:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: translateX(3px);
+}
+
+.choice-card:focus-visible {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.choice-card.selected {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+}
+
+/* Key badge: apenas letra sem borda nem fundo */
+.key-badge {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.choice-card.selected .key-badge {
+  color: #ffffff;
+}
+
+.choice-text {
+  flex: 1;
+}
+
+.choice-check {
+  font-size: 13px;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.choice-card.selected .choice-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.choice-hint {
+  margin-top: 8px;
+}
+
+/* ---------------------------------------------------------
+   Botões e Ações — texto "Avançar" estilo Respondi
+   --------------------------------------------------------- */
+.slide-action {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.btn-primary {
+  background-color: rgba(255, 255, 255, 1);
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  padding: 10px 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background-color: #f2f2f2;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.key-hint {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  user-select: none;
+}
+
+.key-hint strong {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   Tela de Sucesso / Thank You
+   --------------------------------------------------------- */
+.thank-you-content {
+  text-align: left;
+}
+
+.success-icon-badge {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+}
+
+.checkmark-svg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 3;
+  stroke: #ffffff;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #ffffff;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+  stroke: #ffffff;
+  fill: rgba(255, 255, 255, 0.15);
+  animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes strokeCircle {
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes strokeCheck {
+  100% { stroke-dashoffset: 0; }
+}
+
+.thank-you-actions {
+  margin-top: 28px;
+}
+
+.btn-whatsapp {
+  background-color: #25D366;
+  border: none;
+  color: #ffffff;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe5d;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+/* ---------------------------------------------------------
+   Footer — sem o badge do Respondi, só setas de navegação
+   --------------------------------------------------------- */
+.form-footer {
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  width: 100%;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.nav-arrows {
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nav-arrow-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.nav-arrow-btn:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.nav-arrow-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-arrow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------
+   Animações
+   --------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------------------------------------------
+   Responsividade Mobile
+   --------------------------------------------------------- */
+@media (max-width: 768px) {
+  .form-header {
+    top: 20px;
+    left: 20px;
+  }
+
+  .form-logo {
+    max-height: 40px;
+    max-width: 140px;
+  }
+
+  .form-viewport {
+    padding: 70px 18px 80px 18px;
+  }
+
+  .field-input {
+    font-size: 18px;
+  }
+
+  .choice-card {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+
+  .form-footer {
+    padding: 0 20px;
+    bottom: 18px;
+  }
+
+  .key-hint {
+    display: none;
+  }
+}
+
+/* ── Correção de Teclado (telas curtas) ── */
+@media (max-height: 680px) {
+  .form-viewport {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding-top: 60px;
+  }
+  .form-slides-container {
+    min-height: unset;
+    margin-bottom: 40px;
+  }
+}

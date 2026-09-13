@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
+  <title>Sessão Estratégica Gratuita</title>
+  <meta property="og:title" content="Sessão Estratégica Gratuita">
+  <meta property="og:description" content="Se você é empresária, profissional ou especialista e sente que poderia ganhar mais com tudo aquilo que sabe, responda às perguntas abaixo.">
+  <meta name="description" content="Sessão Estratégica Gratuita - Análise estratégica para negócio digital escalável">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+  <style>
+/* =========================================================
+   FORMULÁRIO AUDAX — CLONE RESPONDI
+   ========================================================= */
+:root {
+  --form-font: 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --form-color-bg: #b6b5b3;
+  --input-border-bottom: rgba(255,255,255,0.5);
+  --input-border-bottom-focus: #ffffff;
+  --card-bg: rgba(255,255,255,0.08);
+  --card-border: rgba(255,255,255,0.28);
+  --card-hover-bg: rgba(255,255,255,0.2);
+  --error-color: #ff5252;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%; width: 100%; overflow: hidden;
+  font-family: var(--form-font); font-weight: 400;
+  background-color: var(--form-color-bg);
+  background-image: url('/audax/bg.png'), url('bg.png');
+  background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background: rgba(18,20,24,0.35);
+  pointer-events: none; z-index: 1;
+}
+
+/* ── Barra de Progresso ── */
+.progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.15); z-index: 100; }
+.progress-bar-fill { height: 100%; width: 0%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.7); transition: width 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+/* ── Header / Logo ── */
+.form-header { position: fixed; top: 28px; left: 40px; z-index: 50; }
+.form-logo { max-height: 48px; max-width: 170px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); transition: transform 0.2s; display: block; }
+.form-logo:hover { transform: scale(1.02); }
+
+/* ── Viewport / Slides ── */
+.form-viewport { position: relative; height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; padding: 90px 32px 70px; z-index: 10; }
+.form-slides-container { position: relative; width: 100%; max-width: 680px; min-height: 360px; display: flex; align-items: center; justify-content: center; }
+
+.slide-item {
+  position: absolute; width: 100%;
+  opacity: 0; visibility: hidden; transform: translateY(40px); pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), visibility 0.4s;
+  display: flex; flex-direction: column;
+}
+.slide-item.active { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+.slide-item.slide-up-exit { opacity: 0; visibility: hidden; transform: translateY(-40px); pointer-events: none; }
+.slide-item.slide-down-exit { opacity: 0; visibility: hidden; transform: translateY(40px); pointer-events: none; }
+.slide-content { width: 100%; display: flex; flex-direction: column; }
+
+/* ── Tipografia (Lato 400, igual ao Respondi original) ── */
+.slide-title {
+  font-size: clamp(32px, 5.5vw, 48px);
+  font-weight: 700; line-height: 1.15;
+  color: #fff; margin-bottom: 16px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.slide-description {
+  font-size: clamp(16px, 2.4vw, 20px); font-weight: 400;
+  color: rgba(255,255,255,0.9); line-height: 1.55; margin-bottom: 32px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.question-label {
+  font-size: clamp(26px, 4.2vw, 36px); font-weight: 700; line-height: 1.25;
+  color: #fff; margin-bottom: 10px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.q-number { font-weight: 400; font-size: 0.75em; opacity: 0.75; margin-right: 6px; }
+.required-star { color: #ff5252; margin-left: 2px; }
+.question-hint { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 18px; line-height: 1.4; }
+
+/* Pergunta 5 — texto longo, fonte um pouco menor */
+#step-5 .question-label {
+  font-size: clamp(20px, 3.2vw, 28px);
+}
+
+/* ── Inputs — apenas linha inferior, sem caixa ── */
+.field-wrap { width: 100%; max-width: 520px; margin-bottom: 22px; }
+
+.field-input {
+  width: 100%;
+  padding: 8px 0 12px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--input-border-bottom);
+  border-radius: 0;
+  color: #fff;
+  font-family: inherit; font-size: 20px; font-weight: 400;
+  outline: none;
+  transition: border-color 0.25s ease;
+  caret-color: #fff;
+}
+.field-input:focus { border-bottom-color: #fff; }
+.field-input::placeholder { color: rgba(255,255,255,0.38); font-weight: 300; font-size: 18px; }
+
+.field-error { display: none; color: var(--error-color); font-size: 13px; margin-top: 6px; animation: fadeIn 0.2s ease-in; }
+.field-wrap.has-error .field-input,
+.field-wrap.has-error .phone-input-group { border-bottom-color: var(--error-color) !important; }
+.field-wrap.has-error .field-error { display: block; }
+
+/* ── Telefone — bandeira + +55 + linha, SEM caixa ── */
+.phone-input-group {
+  display: flex; align-items: flex-end; width: 100%; gap: 10px;
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--input-border-bottom);
+  transition: border-color 0.25s ease;
+  position: relative;
+}
+.phone-input-group:focus-within { border-bottom-color: #fff; }
+
+/* Seletor clicável */
+.country-selector {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 0 12px 0; cursor: pointer; user-select: none; flex-shrink: 0;
+  position: relative;
+}
+.country-selector .flag { font-size: 20px; line-height: 1; }
+.country-selector .dial-code { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.85); }
+.selector-arrow { font-size: 10px; opacity: 0.6; margin-left: 2px; transition: transform 0.2s; }
+.country-selector[aria-expanded="true"] .selector-arrow { transform: rotate(180deg); }
+
+/* Dropdown */
+.country-dropdown {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0;
+  width: 260px; max-height: 280px;
+  background: rgba(30,30,30,0.97); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; overflow: hidden;
+  z-index: 200; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+}
+.country-dropdown.open { display: flex; flex-direction: column; }
+.country-search-wrap { padding: 10px 10px 6px; flex-shrink: 0; }
+.country-search-wrap input {
+  width: 100%; padding: 7px 10px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 5px; color: #fff; font-size: 14px; font-family: inherit; outline: none;
+}
+.country-search-wrap input::placeholder { color: rgba(255,255,255,0.4); }
+.country-list {
+  list-style: none; overflow-y: auto; flex: 1;
+  padding: 4px 0; margin: 0;
+}
+.country-list li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; cursor: pointer; font-size: 14px; color: #fff;
+  transition: background 0.15s;
+}
+.country-list li:hover { background: rgba(255,255,255,0.12); }
+.country-list li.selected { background: rgba(255,255,255,0.18); }
+.country-list li .c-flag { font-size: 18px; flex-shrink: 0; }
+.country-list li .c-name { flex: 1; }
+.country-list li .c-dial { font-size: 13px; opacity: 0.6; }
+
+.phone-input {
+  border: none !important; border-bottom: none !important;
+  background: transparent; border-radius: 0;
+  box-shadow: none !important; padding-left: 0; flex: 1;
+}
+
+/* ── Choice Cards ── */
+.choice-list { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 500px; margin: 12px 0 16px 0; }
+
+.choice-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.38);
+  border-radius: 6px;
+  color: #fff; font-family: inherit; font-size: 18px; font-weight: 400; text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+  backdrop-filter: blur(8px); outline: none;
+}
+.choice-card:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.75); transform: translateX(3px); }
+.choice-card.selected { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.9); box-shadow: 0 0 14px rgba(255,255,255,0.25); }
+
+/* ── Key badge: só a letra, SEM borda ou fundo ── */
+.key-badge {
+  min-width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: transparent;
+  font-size: 13px; font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  flex-shrink: 0; transition: color 0.2s;
+}
+.choice-card.selected .key-badge { color: #fff; }
+.choice-text { flex: 1; }
+.choice-check { font-size: 13px; font-weight: bold; opacity: 0; transform: scale(0.6); transition: all 0.2s ease; color: #fff; }
+.choice-card.selected .choice-check { opacity: 1; transform: scale(1); }
+
+/* ── Botão "Avançar" ── */
+.slide-action { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+
+.btn-primary {
+  background: #fff; color: #000;
+  border: none; border-radius: 4px;
+  font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: 0.3px;
+  padding: 10px 24px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  transition: all 0.2s ease; text-decoration: none;
+}
+.btn-primary:hover { background: #f0f0f0; transform: translateY(-1px); box-shadow: 0 5px 16px rgba(0,0,0,0.3); }
+.btn-primary:active { transform: translateY(0); }
+
+.key-hint { font-size: 13px; color: rgba(255,255,255,0.58); user-select: none; }
+.key-hint strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+/* ── Thank You ── */
+.thank-you-content { text-align: left; }
+.thank-you-content .slide-title {
+  font-size: clamp(30px, 5.5vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.thank-you-content .slide-description {
+  font-size: clamp(16px, 2.4vw, 20px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 0;
+}
+.success-icon-badge { width: 64px; height: 64px; margin-bottom: 20px; }
+.checkmark-svg { width: 64px; height: 64px; border-radius: 50%; display: block; stroke-width: 3; stroke: #fff; stroke-miterlimit: 10; }
+.checkmark-circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 3; stroke-miterlimit: 10; stroke: #fff; fill: rgba(255,255,255,0.15); animation: strokeCircle 0.6s cubic-bezier(0.65,0,0.45,1) forwards; }
+.checkmark-check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: strokeCheck 0.3s cubic-bezier(0.65,0,0.45,1) 0.6s forwards; }
+@keyframes strokeCircle { 100% { stroke-dashoffset: 0; } }
+@keyframes strokeCheck { 100% { stroke-dashoffset: 0; } }
+.thank-you-actions { margin-top: 28px; }
+.btn-whatsapp { background: #25D366 !important; color: #fff !important; }
+.btn-whatsapp:hover { background: #1ebe5d !important; box-shadow: 0 6px 20px rgba(37,211,102,0.4) !important; }
+
+/* ── Footer — SEM badge, só setas ── */
+.form-footer {
+  position: fixed; bottom: 24px; left: 0; width: 100%;
+  padding: 0 36px;
+  display: flex; align-items: center; justify-content: flex-end;
+  z-index: 50; pointer-events: none;
+}
+.nav-arrows { display: flex; border-radius: 5px; overflow: hidden; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(8px); pointer-events: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.nav-arrow-btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: #fff; cursor: pointer; transition: background 0.2s; outline: none; }
+.nav-arrow-btn:first-child { border-right: 1px solid rgba(255,255,255,0.18); }
+.nav-arrow-btn:hover:not(:disabled) { background: rgba(255,255,255,0.2); }
+.nav-arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .form-header { top: 20px; left: 20px; }
+  .form-logo { max-height: 38px; max-width: 130px; }
+  .form-viewport { padding: 72px 20px 72px; }
+  .field-input { font-size: 18px; }
+  .choice-card { padding: 11px 14px; font-size: 15px; }
+  .form-footer { padding: 0 20px; bottom: 18px; }
+  .key-hint { display: none; }
+}
+
+/* ── Correção de Teclado (telas curtas) ── */
+@media (max-height: 680px) {
+  .form-viewport {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding-top: 60px;
+  }
+  .form-slides-container {
+    min-height: unset;
+    margin-bottom: 40px;
+  }
+}
+
+  /* ── Bloqueia zoom em todos os browsers ── */
+  html, body {
+    touch-action: pan-x pan-y;
+    -ms-touch-action: pan-x pan-y;
+  }
+  </style>
+
+  <script>
+  /* Bloqueia pinch-zoom no Safari iOS e Chrome */
+  document.addEventListener('gesturestart', function(e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener('gesturechange', function(e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener('gestureend', function(e) { e.preventDefault(); }, { passive: false });
+
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('wheel', function(e) {
+    if (e.ctrlKey) e.preventDefault();
+  }, { passive: false });
+  </script>
+</head>
+
+<body>
+  <!-- Barra de Progresso Superior -->
+  <div class="progress-bar-container" id="progressContainer">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- Logo -->
+  <header class="form-header">
+    <img
+      src="logo.png"
+      onerror="this.src='https://cloudcdn.respondi.app/S11451/userfiles/176169/b2658542-59e6-4d3c-8ae0-13da5640f9c1.png?Expires=1789232025&KeyName=rsp-privateprodpkey&Signature=CPCe6zVeaBBLXQq_T8q2KhxzQDI='"
+      alt="Audax Company"
+      class="form-logo"
+      id="formLogo">
+  </header>
+
+  <!-- Formulário em Slides -->
+  <main class="form-viewport">
+    <div class="form-slides-container" id="slidesContainer">
+
+      <!-- ETAPA 0: Boas-vindas -->
+      <section class="slide-item active" data-step="0" id="step-0">
+        <div class="slide-content">
+          <h1 class="slide-title">Sessão Estratégica Gratuita</h1>
+          <p class="slide-description">
+            Se você é empresária, profissional ou especialista e sente que poderia ganhar mais com tudo aquilo que sabe, responda às perguntas abaixo. Vou analisar seu momento e entender se consigo te ajudar a transformar seu conhecimento ou serviço em um negócio digital escalável.
+          </p>
+          <div class="slide-action">
+            <button type="button" class="btn-primary" id="btn-start" onclick="nextStep()">
+              <span>Começar →</span>
+            </button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 1: Nome -->
+      <section class="slide-item" data-step="1" id="step-1">
+        <div class="slide-content">
+          <label class="question-label" for="input-nome">
+            <span class="q-number">1/6</span> Qual seu nome? <span class="required-star">*</span>
+          </label>
+          <div class="field-wrap">
+            <input type="text" id="input-nome" name="nome" class="field-input" placeholder="Sua resposta aqui..." autocomplete="name" required>
+            <div class="field-error" id="error-nome">Por favor, preencha este campo.</div>
+          </div>
+          <div class="slide-action">
+            <button type="button" class="btn-primary" onclick="submitCurrentStep()"><span>Avançar</span></button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 2: WhatsApp -->
+      <section class="slide-item" data-step="2" id="step-2">
+        <div class="slide-content">
+          <label class="question-label" for="input-whatsapp">
+            <span class="q-number">2/6</span> Qual é o seu número de WhatsApp? <span class="required-star">*</span>
+          </label>
+          <p class="question-hint">Digite este número corretamente, iremos entrar em contato por aqui.</p>
+          <div class="field-wrap">
+            <div class="phone-input-group">
+              <!-- Seletor de país -->
+              <div class="country-selector" id="countrySelectorBtn" onclick="toggleCountryDropdown()" tabindex="0" role="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="flag" id="selectedFlag">🇧🇷</span>
+                <span class="dial-code" id="selectedDial">+55</span>
+                <span class="selector-arrow">▾</span>
+              </div>
+              <!-- Dropdown de países -->
+              <div class="country-dropdown" id="countryDropdown" role="listbox">
+                <div class="country-search-wrap">
+                  <input type="text" id="countrySearch" placeholder="Pesquisar..." autocomplete="off" oninput="filterCountries(this.value)" onclick="event.stopPropagation()">
+                </div>
+                <ul class="country-list" id="countryList"></ul>
+              </div>
+              <input type="tel" id="input-whatsapp" name="whatsapp" class="field-input phone-input" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" required>
+            </div>
+            <div class="field-error" id="error-whatsapp">Por favor, digite um número de WhatsApp válido com DDD.</div>
+          </div>
+          <div class="slide-action">
+            <button type="button" class="btn-primary" onclick="submitCurrentStep()"><span>Avançar</span></button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 3: Instagram -->
+      <section class="slide-item" data-step="3" id="step-3">
+        <div class="slide-content">
+          <label class="question-label" for="input-instagram">
+            <span class="q-number">3/6</span> Qual é o @ do seu instagram? <span class="required-star">*</span>
+          </label>
+          <div class="field-wrap">
+            <input type="text" id="input-instagram" name="instagram" class="field-input" placeholder="@seuperfil" autocomplete="off" required>
+            <div class="field-error" id="error-instagram">Por favor, informe seu perfil do Instagram.</div>
+          </div>
+          <div class="slide-action">
+            <button type="button" class="btn-primary" onclick="submitCurrentStep()"><span>Avançar</span></button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 4: E-mail -->
+      <section class="slide-item" data-step="4" id="step-4">
+        <div class="slide-content">
+          <label class="question-label" for="input-email">
+            <span class="q-number">4/6</span> Digite seu e-mail <span class="required-star">*</span>
+          </label>
+          <div class="field-wrap">
+            <input type="email" id="input-email" name="email" class="field-input" placeholder="nome@exemplo.com" autocomplete="email" required>
+            <div class="field-error" id="error-email">Por favor, insira um e-mail válido.</div>
+          </div>
+          <div class="slide-action">
+            <button type="button" class="btn-primary" onclick="submitCurrentStep()"><span>Avançar</span></button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 5: Sim / Não -->
+      <section class="slide-item" data-step="5" id="step-5">
+        <div class="slide-content">
+          <div class="question-label">
+            <span class="q-number">5/6</span> A Implementação Audax é para quem quer criar ou escalar um curso e/ou mentoria. É isso que você busca? <span class="required-star">*</span>
+          </div>
+          <div class="choice-list" data-field="busca_audax">
+            <button type="button" class="choice-card" data-key="A" data-value="Sim" onclick="selectChoice('busca_audax','Sim',this)">
+              <span class="key-badge">A</span>
+              <span class="choice-text">Sim</span>
+              <span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="B" data-value="Não" onclick="selectChoice('busca_audax','Não',this)">
+              <span class="key-badge">B</span>
+              <span class="choice-text">Não</span>
+              <span class="choice-check">✓</span>
+            </button>
+          </div>
+          <div class="field-error" id="error-busca_audax">Selecione uma das opções para continuar.</div>
+          <div class="slide-action">
+            <span class="key-hint">Pressione <strong>A</strong> ou <strong>B</strong>, ou clique na opção</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 6: Faturamento -->
+      <section class="slide-item" data-step="6" id="step-6">
+        <div class="slide-content">
+          <div class="question-label">
+            <span class="q-number">6/6</span> Qual a sua média de faturamento mensal? <span class="required-star">*</span>
+          </div>
+          <p class="question-hint">Escolha apenas uma opção</p>
+          <div class="choice-list" data-field="faturamento">
+            <button type="button" class="choice-card" data-key="A" data-value="Até R$ 5 mil" onclick="selectChoice('faturamento','Até R$ 5 mil',this)">
+              <span class="key-badge">A</span><span class="choice-text">Até R$ 5 mil</span><span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="B" data-value="De R$ 5 a R$ 10 mil" onclick="selectChoice('faturamento','De R$ 5 a R$ 10 mil',this)">
+              <span class="key-badge">B</span><span class="choice-text">De R$ 5 a R$ 10 mil</span><span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="C" data-value="De R$ 10 a R$ 20 mil" onclick="selectChoice('faturamento','De R$ 10 a R$ 20 mil',this)">
+              <span class="key-badge">C</span><span class="choice-text">De R$ 10 a R$ 20 mil</span><span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="D" data-value="De R$ 20 a R$ 50 mil" onclick="selectChoice('faturamento','De R$ 20 a R$ 50 mil',this)">
+              <span class="key-badge">D</span><span class="choice-text">De R$ 20 a R$ 50 mil</span><span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="E" data-value="De R$ 50 mil a R$ 100 mil" onclick="selectChoice('faturamento','De R$ 50 mil a R$ 100 mil',this)">
+              <span class="key-badge">E</span><span class="choice-text">De R$ 50 mil a R$ 100 mil</span><span class="choice-check">✓</span>
+            </button>
+            <button type="button" class="choice-card" data-key="F" data-value="Acima de R$ 100 mil" onclick="selectChoice('faturamento','Acima de R$ 100 mil',this)">
+              <span class="key-badge">F</span><span class="choice-text">Acima de R$ 100 mil</span><span class="choice-check">✓</span>
+            </button>
+          </div>
+          <div class="field-error" id="error-faturamento">Selecione seu faturamento para finalizar.</div>
+          <div class="slide-action" style="margin-top:18px;">
+            <button type="button" class="btn-primary" onclick="submitCurrentStep()"><span>Enviar respostas →</span></button>
+            <span class="key-hint">pressione <strong>Enter ↵</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 7: Obrigado -->
+      <section class="slide-item" data-step="7" id="step-7">
+        <div class="slide-content thank-you-content">
+          <div class="success-icon-badge">
+            <svg viewBox="0 0 52 52" class="checkmark-svg">
+              <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+              <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+          <h2 class="slide-title">Aplicação enviada!</h2>
+          <p class="slide-description">Aguarde, estamos te direcionando para o WhatsApp...</p>
+          <div class="thank-you-actions" id="thankYouActions">
+            <a href="#" id="btn-whatsapp-direct" target="_blank" rel="noopener noreferrer" class="btn-primary btn-whatsapp">
+              <span>CONTINUAR NO WHATSAPP</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer — apenas setas, sem badge -->
+  <footer class="form-footer">
+    <div class="nav-arrows" id="navArrows">
+      <button type="button" class="nav-arrow-btn" id="btn-nav-prev" onclick="prevStep()" title="Anterior (Shift+Enter)" disabled>
+        <svg viewBox="0 0 384 512" width="14" height="14" fill="currentColor">
+          <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/>
+        </svg>
+      </button>
+      <button type="button" class="nav-arrow-btn" id="btn-nav-next" onclick="submitCurrentStep()" title="Próximo (Enter)">
+        <svg viewBox="0 0 384 512" width="14" height="14" fill="currentColor">
+          <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/>
+        </svg>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+/**
+ * FORMULÁRIO AUDAX — CLONE RESPONDI
+ */
+
+const CONFIG = {
+  WHATSAPP_NUMBER: '5521996768132',
+  WEBHOOK_URL: 'https://forminit.com/f/p4qc17jp2py',
+  MAKE_WEBHOOK_URL: 'https://hook.us2.make.com/sin7hi5s4yj8c4gr2l1n7okt0qwspmol',
+  WA_TITLE: 'Olá! Acabei de responder à Sessão Estratégica Gratuita:',
+  TOTAL_STEPS: 7
+};
+
+let currentStep = 0;
+const formData = { nome: '', whatsapp: '', instagram: '', email: '', busca_audax: '', faturamento: '' };
+
+const progressBar = document.getElementById('progressBar');
+const btnNavPrev = document.getElementById('btn-nav-prev');
+const btnNavNext = document.getElementById('btn-nav-next');
+const navArrows  = document.getElementById('navArrows');
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSavedData();
+  setupPhoneMask();
+  setupKeyboard();
+  updateProgress();
+  updateNavButtons();
+  focusCurrent();
+});
+
+/* ── Navegação ── */
+function goToStep(target, dir = 'next') {
+  if (target < 0 || target > CONFIG.TOTAL_STEPS || target === currentStep) return;
+
+  const cur = document.querySelector('.slide-item[data-step="' + currentStep + '"]');
+  const nxt = document.querySelector('.slide-item[data-step="' + target + '"]');
+  if (!cur || !nxt) return;
+
+  cur.classList.add(dir === 'next' ? 'slide-up-exit' : 'slide-down-exit');
+  cur.classList.remove('active');
+  setTimeout(() => cur.classList.remove('slide-up-exit', 'slide-down-exit'), 400);
+
+  currentStep = target;
+  nxt.classList.add('active');
+
+  updateProgress();
+  updateNavButtons();
+  setTimeout(focusCurrent, 100);
+
+  if (currentStep === 7) onComplete();
+}
+
+function nextStep() { goToStep(currentStep + 1, 'next'); }
+function prevStep() { if (currentStep > 0 && currentStep < 7) goToStep(currentStep - 1, 'prev'); }
+
+function submitCurrentStep() {
+  clearErrors();
+
+  if (currentStep === 0) { nextStep(); return; }
+
+  if (currentStep === 1) {
+    const v = document.getElementById('input-nome').value.trim();
+    if (!v || v.length < 2) { showError('nome', 'Por favor, digite seu nome.'); document.getElementById('input-nome').focus(); return; }
+    formData.nome = v; save(); nextStep(); return;
+  }
+  if (currentStep === 2) {
+    const v = document.getElementById('input-whatsapp').value.trim();
+    if (v.replace(/\D/g,'').length < 10) { showError('whatsapp'); document.getElementById('input-whatsapp').focus(); return; }
+    formData.whatsapp = v; save(); nextStep(); return;
+  }
+  if (currentStep === 3) {
+    let v = document.getElementById('input-instagram').value.trim();
+    if (!v) { showError('instagram', 'Por favor, informe seu @ do Instagram.'); document.getElementById('input-instagram').focus(); return; }
+    if (!v.startsWith('@')) { v = '@' + v; document.getElementById('input-instagram').value = v; }
+    formData.instagram = v; save(); nextStep(); return;
+  }
+  if (currentStep === 4) {
+    const v = document.getElementById('input-email').value.trim();
+    if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { showError('email', 'Por favor, insira um e-mail válido.'); document.getElementById('input-email').focus(); return; }
+    formData.email = v; save(); nextStep(); return;
+  }
+  if (currentStep === 5) {
+    if (!formData.busca_audax) { showError('busca_audax', 'Selecione uma opção para continuar.'); return; }
+    nextStep(); return;
+  }
+  if (currentStep === 6) {
+    if (!formData.faturamento) { showError('faturamento', 'Selecione seu faturamento.'); return; }
+    nextStep(); return;
+  }
+}
+
+/* ── Seletor de País ── */
+const COUNTRIES = [
+  { flag:'🇧🇷', name:'Brasil',           dial:'+55' },
+  { flag:'🇺🇸', name:'Estados Unidos',   dial:'+1'  },
+  { flag:'🇵🇹', name:'Portugal',         dial:'+351'},
+  { flag:'🇦🇷', name:'Argentina',        dial:'+54' },
+  { flag:'🇨🇴', name:'Colômbia',         dial:'+57' },
+  { flag:'🇲🇽', name:'México',           dial:'+52' },
+  { flag:'🇪🇸', name:'Espanha',          dial:'+34' },
+  { flag:'🇬🇧', name:'Reino Unido',      dial:'+44' },
+  { flag:'🇨🇦', name:'Canadá',           dial:'+1'  },
+  { flag:'🇩🇪', name:'Alemanha',         dial:'+49' },
+  { flag:'🇫🇷', name:'França',           dial:'+33' },
+  { flag:'🇮🇹', name:'Itália',           dial:'+39' },
+  { flag:'🇯🇵', name:'Japão',            dial:'+81' },
+  { flag:'🇦🇺', name:'Austrália',        dial:'+61' },
+  { flag:'🇨🇱', name:'Chile',            dial:'+56' },
+  { flag:'🇵🇪', name:'Peru',             dial:'+51' },
+  { flag:'🇧🇴', name:'Bolívia',          dial:'+591'},
+  { flag:'🇺🇾', name:'Uruguai',          dial:'+598'},
+  { flag:'🇵🇾', name:'Paraguai',         dial:'+595'},
+  { flag:'🇻🇪', name:'Venezuela',        dial:'+58' },
+  { flag:'🇦🇴', name:'Angola',           dial:'+244'},
+  { flag:'🇲🇿', name:'Moçambique',       dial:'+258'},
+  { flag:'🇨🇻', name:'Cabo Verde',       dial:'+238'},
+  { flag:'🇿🇦', name:'África do Sul',    dial:'+27' },
+  { flag:'🇨🇭', name:'Suíça',            dial:'+41' },
+  { flag:'🇳🇱', name:'Países Baixos',    dial:'+31' },
+  { flag:'🇧🇪', name:'Bélgica',          dial:'+32' },
+  { flag:'🇸🇪', name:'Suécia',           dial:'+46' },
+  { flag:'🇳🇴', name:'Noruega',          dial:'+47' },
+  { flag:'🇮🇪', name:'Irlanda',          dial:'+353'},
+  { flag:'🇳🇿', name:'Nova Zelândia',    dial:'+64' },
+  { flag:'🇦🇪', name:'Emirados Árabes',  dial:'+971'},
+];
+
+let selectedCountry = COUNTRIES[0];
+let dropdownOpen = false;
+
+function buildCountryList(filter = '') {
+  const ul = document.getElementById('countryList');
+  if (!ul) return;
+  const q = filter.toLowerCase();
+  const filtered = COUNTRIES.filter(c =>
+    c.name.toLowerCase().includes(q) || c.dial.includes(q)
+  );
+  ul.innerHTML = filtered.map(c => `
+    <li onclick="selectCountry('${c.dial}')" class="${c.dial === selectedCountry.dial && c.name === selectedCountry.name ? 'selected' : ''}">
+      <span class="c-flag">${c.flag}</span>
+      <span class="c-name">${c.name}</span>
+      <span class="c-dial">${c.dial}</span>
+    </li>`).join('');
+}
+
+function toggleCountryDropdown() {
+  const btn = document.getElementById('countrySelectorBtn');
+  const dd  = document.getElementById('countryDropdown');
+  if (!dd) return;
+  dropdownOpen = !dropdownOpen;
+  dd.classList.toggle('open', dropdownOpen);
+  btn.setAttribute('aria-expanded', dropdownOpen);
+  if (dropdownOpen) {
+    buildCountryList();
+    const search = document.getElementById('countrySearch');
+    if (search) { search.value = ''; search.focus(); }
+  }
+}
+
+function filterCountries(val) { buildCountryList(val); }
+
+function selectCountry(dial) {
+  const country = COUNTRIES.find(c => c.dial === dial) || COUNTRIES[0];
+  selectedCountry = country;
+  document.getElementById('selectedFlag').textContent = country.flag;
+  document.getElementById('selectedDial').textContent = country.dial;
+  // fecha dropdown
+  dropdownOpen = false;
+  const dd = document.getElementById('countryDropdown');
+  const btn = document.getElementById('countrySelectorBtn');
+  if (dd)  dd.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+  document.getElementById('input-whatsapp').focus();
+}
+
+// Fecha dropdown ao clicar fora
+document.addEventListener('click', function(e) {
+  const btn = document.getElementById('countrySelectorBtn');
+  const dd  = document.getElementById('countryDropdown');
+  if (dropdownOpen && btn && !btn.contains(e.target) && dd && !dd.contains(e.target)) {
+    dropdownOpen = false;
+    dd.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+});
+
+/* ── Seleção de opções ── */
+function selectChoice(field, value, el) {
+  clearErrors();
+  formData[field] = value;
+  save();
+  const list = el.closest('.choice-list');
+  if (list) list.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  // No faturamento (step 6) não avança automaticamente — espera o botão
+  if (field !== 'faturamento') setTimeout(nextStep, 260);
+}
+
+/* ── Errors ── */
+function showError(field, msg) {
+  const el = document.getElementById('error-' + field);
+  if (el) { if (msg) el.textContent = msg; el.style.display = 'block'; }
+  const wrap = el && el.closest('.field-wrap');
+  if (wrap) wrap.classList.add('has-error');
+}
+function clearErrors() {
+  document.querySelectorAll('.field-error').forEach(e => e.style.display = 'none');
+  document.querySelectorAll('.field-wrap').forEach(w => w.classList.remove('has-error'));
+}
+
+/* ── UI ── */
+function updateProgress() {
+  const pct = [0,15,30,45,60,75,90,100];
+  if (progressBar) progressBar.style.width = (pct[currentStep] || 0) + '%';
+}
+function updateNavButtons() {
+  btnNavPrev.disabled = currentStep === 0 || currentStep === 7;
+  navArrows.style.display = currentStep === 7 ? 'none' : 'flex';
+}
+function focusCurrent() {
+  const slide = document.querySelector('.slide-item[data-step="' + currentStep + '"]');
+  if (!slide) return;
+  const inp = slide.querySelector('input');
+  if (inp) { inp.focus(); if (inp.value) inp.setSelectionRange(inp.value.length, inp.value.length); }
+}
+
+/* ── Teclado ── */
+function setupKeyboard() {
+  document.addEventListener('keydown', e => {
+    if (currentStep === 7) return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.shiftKey) prevStep(); else submitCurrentStep();
+      return;
+    }
+    if (currentStep === 5 || currentStep === 6) {
+      const slide = document.querySelector('.slide-item[data-step="' + currentStep + '"]');
+      if (slide) {
+        const card = slide.querySelector('.choice-card[data-key="' + e.key.toUpperCase() + '"]');
+        if (card) { e.preventDefault(); card.click(); }
+      }
+    }
+  });
+}
+
+/* ── Máscara Telefone ── */
+function setupPhoneMask() {
+  const inp = document.getElementById('input-whatsapp');
+  if (!inp) return;
+  inp.addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 10) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,6) + '-' + v.slice(6);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    e.target.value = v;
+  });
+}
+
+/* ── Conclusão ── */
+async function onComplete() {
+  save();
+
+  // Monta o número completo com código do país
+  const fullPhone = (selectedCountry ? selectedCountry.dial : '+55') + ' ' + formData.whatsapp;
+
+  if (CONFIG.WEBHOOK_URL) {
+    const formDataToSend = new FormData();
+    formDataToSend.append('fi-text-Nome', formData.nome);
+    formDataToSend.append('fi-text-WhatsApp', fullPhone);
+    formDataToSend.append('fi-text-Instagram', formData.instagram);
+    formDataToSend.append('fi-text-Email', formData.email);
+    formDataToSend.append('fi-text-BuscaAudax', formData.busca_audax);
+    formDataToSend.append('fi-text-Faturamento', formData.faturamento);
+    formDataToSend.append('fi-text-SubmittedAt', new Date().toISOString());
+
+    try {
+      await fetch(CONFIG.WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formDataToSend
+      });
+    } catch (err) { console.warn('Erro ao enviar para o Forminit:', err); }
+  }
+
+  if (CONFIG.MAKE_WEBHOOK_URL) {
+    // Número limpo (só dígitos) para facilitar a integração com a API da Audax no Make
+    const cleanPhone = fullPhone.replace(/\D/g, '');
+    
+    const makePayload = {
+      nome: formData.nome,
+      whatsapp: cleanPhone,
+      instagram: formData.instagram,
+      email: formData.email,
+      busca_audax: formData.busca_audax,
+      faturamento: formData.faturamento,
+      submittedAt: new Date().toISOString()
+    };
+
+    try {
+      await fetch(CONFIG.MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(makePayload)
+      });
+    } catch (err) { console.warn('Erro ao enviar para o Make:', err); }
+  }
+
+  const msg =
+    'Olá vim do site e gostaria de saber mais sobre a Implementação Audax, esses são meus dados:\n\n' +
+    'Nome: ' + formData.nome + '\n' +
+    'Instagram: ' + formData.instagram + '\n' +
+    'Faturamento: ' + formData.faturamento;
+
+  const waUrl = 'https://wa.me/' + CONFIG.WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+
+  const btn = document.getElementById('btn-whatsapp-direct');
+  if (btn) btn.href = waUrl;
+
+  // Redireciona automaticamente após 1.5 segundos
+  setTimeout(() => { window.location.href = waUrl; }, 1500);
+}
+
+/* ── LocalStorage ── */
+function save() { try { localStorage.setItem('audax_form', JSON.stringify(formData)); } catch(e){} }
+function loadSavedData() {
+  try {
+    const d = JSON.parse(localStorage.getItem('audax_form') || '{}');
+    Object.assign(formData, d);
+    const fields = { nome:'input-nome', whatsapp:'input-whatsapp', instagram:'input-instagram', email:'input-email' };
+    Object.entries(fields).forEach(([k,id]) => { if (d[k]) { const el = document.getElementById(id); if(el) el.value = d[k]; } });
+    ['busca_audax','faturamento'].forEach(f => {
+      if (d[f]) {
+        const c = document.querySelector('.choice-list[data-field="' + f + '"] .choice-card[data-value="' + d[f] + '"]');
+        if (c) c.classList.add('selected');
+      }
+    });
+  } catch(e) {}
+}
+  </script>
+</body>
+</html>
